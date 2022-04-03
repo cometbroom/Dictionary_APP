@@ -1,8 +1,9 @@
 import data from './data.js';
-// import routes from './pages/routes.js'
-import routes from './example/pages/routes.js';
+import routes from './pages/routes.js'
+//import routes from './example/pages/routes.js';
 import router from './lib/router.js';
 import log from './lib/logger.js';
+import { fetchDefinition } from './fetchers/definitions.js';
 
 function loadApp() {
   // Set the desired log level
@@ -22,3 +23,9 @@ function loadApp() {
 }
 
 window.addEventListener('load', loadApp);
+
+//Dev scripts
+window.checkWordDefinition = (word) => {
+  fetchDefinition(word).then(console.log);
+  return "fetching...";
+}
