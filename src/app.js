@@ -4,6 +4,7 @@ import routes from './pages/routes.js'
 import router from './lib/router.js';
 import log from './lib/logger.js';
 import { fetchDefinition } from './fetchers/definitions.js';
+import { alertBelow } from './components/alerter.js';
 
 function loadApp() {
   // Set the desired log level
@@ -28,4 +29,8 @@ window.addEventListener('load', loadApp);
 window.checkWordDefinition = (word) => {
   fetchDefinition(word).then(console.log);
   return "fetching...";
+}
+
+window.alertCheck = () => {
+  alertBelow("hiiiii");
 }
