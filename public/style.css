@@ -1,3 +1,8 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
 body {
   margin: 0 auto;
   background-color: #f0f0f0;
@@ -9,6 +14,10 @@ body {
 :root {
   --color1-purple: #7A5BFB;
   --color2-blue: #62EDF7;
+}
+
+section {
+  padding: 20px 0px;
 }
 
 section.header {
@@ -24,6 +33,7 @@ section.home-container {
   width: 100%;
 }
 section.home-container form {
+  padding: 20px 0px;
   display: flex;
   gap: 10px;
   width: 100%;
@@ -76,6 +86,32 @@ div#alert-ui {
 .toggle-show {
   opacity: 1!important;
 }
+
+#def-tabs h3 {
+  padding-bottom: 20px;
+  font-size: 2em;
+}
+
+#meaning-tabs {
+}
+#meaning-tabs ul {
+  list-style: none;
+  display: flex;
+  width: 100%;
+  padding-left: 0;
+}
+#meaning-tabs ul li {
+  cursor: pointer;
+  flex: 1;
+  padding: 10px 0px;
+  text-align: center;
+  background-color: var(--color2-blue);
+}
+
+#meaning-tabs ul li:hover {
+  filter: saturate(2);
+}
+
 
 @media (min-width: 960px) {
 
