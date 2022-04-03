@@ -1,8 +1,12 @@
-function createHomeView(props) {
-  const root = document.createElement('div');
-  root.className = 'dialog-container';
+function createHomeView() {
+  const root = document.createElement('section');
+  root.className = 'home-container';
   root.innerHTML = String.raw`
-    <h1>${props.text}</h1>
+    <h3>Which word would you like to look up?</h3>
+    <form>
+      <input type="text">
+      <button>Show me!</button>
+    </form>
   `;
 
   return { root };

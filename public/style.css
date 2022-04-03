@@ -6,12 +6,56 @@ body {
   color: rgba(24, 24, 24, 0.924);
   overflow-y: scroll;
 }
+:root {
+  --color1-purple: #7A5BFB;
+  --color2-blue: #62EDF7;
+}
 
-#app-root {
+section.header {
+  width: 100%;
+  text-align: center;
+  background-color: var(--color1-purple);
+  padding: 2px 0px;
+  color: white;
+}
+
+section.home-container {
+  grid-column: 2/-2;
+  width: 100%;
+}
+section.home-container form {
   display: flex;
-  justify-content: center;
-  height: 100vh;
-  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+section.home-container input {
+  padding: 10px;
+  flex: 3;
+  font-size: 1.2em;
+  border: none;
+  border-bottom: 2px solid gray;
+}
+section.home-container input:focus {
+  border: none;
+  border-bottom: 2px solid gray;
+}
+section.home-container button {
+  padding: 10px;
+  font-size: 1.2em;
+  flex:2;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid gray;
+}
+
+
+
+#router-outlet {
+  display: grid;
+  grid-template-columns: repeat(12,1fr);
+  width: 100%;
 }
 
 div#alert-ui {

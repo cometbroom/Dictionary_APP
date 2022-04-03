@@ -1,8 +1,7 @@
 import createHomeView from '../views/homeView.js';
 
 function createHomePage() {
-  const props = { text: 'It works!' };
-  return createHomeView(props);
+  return createHomeView();
 }
 
 export default createHomePage;
