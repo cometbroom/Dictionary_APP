@@ -14,14 +14,15 @@ const tabsData = {
   onClick: tabClickHandler
 }
 
-function createHomePage(tabLocation) {
+function createHomePage(wordInput, tabLocation) {
   const props = {
     onSubmit: btnClickHandler,
   }
   const homeView = createHomeView(props);
+  if (tabLocation !== undefined) tabsData.currentTab = tabLocation;
   //Means there is / and something in URL so we take it and look up definition
-  if (tabLocation !== undefined) {
-    searchWordAndUpdateData(tabLocation).then(result => {
+  if (wordInput !== undefined) {
+    searchWordAndUpdateData(wordInput).then(result => {
       homeView.root.appendChild(result);
     });
   }
@@ -86,6 +87,7 @@ const checkForInvalids = (target) => {
 
 function updateNavData(definitions) {
   tabsData.word = definitions[0].word;
+  if (tabsData.navItems?.length > 0) return;
   definitions[0].meanings.forEach(meaning => {
     tabsData.navItems.push(meaning.partOfSpeech);
     tabsData.meaningData.push(meaning.definitions);
