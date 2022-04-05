@@ -1,28 +1,31 @@
-import { alertBelow } from '../components/alerter.js';
-import { DEFINITION_TABS_ID, HOME_CONTAINER_CLASS } from '../constants.js';
-import { fetchDefinition } from '../fetchers/definitions.js';
-import router from '../lib/router.js';
-import { C_TYPE } from '../tools/checkType.js';
-import createDefinitionTabsView from '../views/homeTabsView.js';
-import createHomeView from '../views/homeView.js';
+import { alertBelow } from "../components/alerter.js";
+import createNavComponent from "../components/navbar.js";
+import { DEFINITION_TABS_ID, HOME_CONTAINER_CLASS } from "../constants.js";
+import { fetchDefinition } from "../fetchers/definitions.js";
+import router from "../lib/router.js";
+import { C_TYPE } from "../tools/checkType.js";
+import createDefinitionTabsView from "../views/homeTabsView.js";
+import createHomeView from "../views/homeView.js";
 
 const tabsData = {
-	currentTab: 0,
+  currentTab: 0,
   word: "",
-  navItems: [],
+  tabOptions: [],
   meaningData: [],
-  onClick: tabClickHandler
-}
+  onClick: tabClickHandler,
+};
 
 function createHomePage(wordInput, tabLocation) {
   const props = {
     onSubmit: btnClickHandler,
-  }
+  };
+  createNavComponent();
+  resetTabsData();
   const homeView = createHomeView(props);
   if (tabLocation !== undefined) tabsData.currentTab = tabLocation;
   //Means there is / and something in URL so we take it and look up definition
   if (wordInput !== undefined) {
-    searchWordAndUpdateData(wordInput).then(result => {
+    searchWordAndUpdateData(wordInput).then((result) => {
       homeView.root.appendChild(result);
     });
   }
@@ -31,20 +34,20 @@ function createHomePage(wordInput, tabLocation) {
 
 //Submit word button handler.
 function btnClickHandler(input) {
-  return function(e) {
+  return function (e) {
     e.preventDefault();
     if (input.value !== tabsData.word) {
       resetTabsData();
     }
-    router.navigateTo('home', input.value);
-  }
+    router.navigateTo("home", input.value);
+  };
 }
 
 //Reset data for our definition view
 function resetTabsData() {
   tabsData.currentTab = 0;
   tabsData.meaningData = [];
-  tabsData.navItems = [];
+  tabsData.tabOptions = [];
   tabsData.word = "";
 }
 
@@ -57,9 +60,8 @@ async function searchWordAndUpdateData(word) {
     updateNavData(definitions);
     return createTabsSection();
   } catch (error) {
-      alertBelow(error.message);
+    alertBelow(error.message);
   }
-
 }
 
 const checkForInvalids = (target) => {
@@ -68,11 +70,11 @@ const checkForInvalids = (target) => {
     alertBelow("Please enter something");
     return false;
   }
-  if(C_TYPE.isNumberedString(target)) {
+  if (C_TYPE.isNumberedString(target)) {
     alertBelow("Numbers aren't allowed");
     return false;
   }
-  if(!C_TYPE.isString) {
+  if (!C_TYPE.isString) {
     alertBelow("Enter a string");
     return false;
   }
@@ -82,16 +84,19 @@ const checkForInvalids = (target) => {
     return false;
   }
 
-  return true; 
-}
+  return true;
+};
 
 function updateNavData(definitions) {
   tabsData.word = definitions[0].word;
-  if (tabsData.navItems?.length > 0) return;
-  definitions[0].meanings.forEach(meaning => {
-    tabsData.navItems.push(meaning.partOfSpeech);
-    tabsData.meaningData.push(meaning.definitions);
-  })
+  if (tabsData.tabOptions?.length > 0) return;
+  definitions[0].meanings.forEach((meaning) => {
+    tabsData.tabOptions.push({
+      content: `As ${meaning.partOfSpeech}`,
+      onClick: tabClickHandler,
+      data: meaning.definitions,
+    });
+  });
 }
 
 function createTabsSection() {
@@ -111,6 +116,5 @@ function updateDefinitionTabs() {
   homeContainer.removeChild(defTabs);
   homeContainer.appendChild(createDefinitionTabsView(tabsData));
 }
-
 
 export default createHomePage;

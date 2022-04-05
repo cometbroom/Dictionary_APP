@@ -4,6 +4,8 @@ export const createElement = (tag, options = null) => {
 	if (options?.id) element.id = options.id;
 	if (options?.value) element.value = options.value;
 	if (options?.type) element.type = options.type;
+	if (options?.class) element.classList.add(options.class);
+	if (options?.onClick) element.addEventListener('click', options.onClick);
   return element;
 }
 
