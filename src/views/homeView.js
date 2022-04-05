@@ -1,10 +1,11 @@
+import { HOME_CONTAINER_CLASS } from "../constants.js";
 import { createElement } from "../tools/DOMCreate.js";
 
 function createHomeView(props) {
   const root = document.createElement('section');
-  root.className = 'home-container';
+  root.className = HOME_CONTAINER_CLASS;
   root.innerHTML = String.raw`
-    <h3>Which word would you like to look up?</h3>
+    <h2>Which word would you like to look up?</h2>
   `;
   root.appendChild(createFormView(props));
 
@@ -14,12 +15,10 @@ function createHomeView(props) {
 const createFormView = (props) => {
   const form = createElement("form", {type: "submit"});
   const input = createElement("input", {type: "text"});
-  const btn = createElement("button", {content: "Show me!", type: "submit"});
+  const btn = createElement("button", {content: "Define", type: "submit"});
 
-  if (props?.onSubmit) {
-    //Feed input to the button
-    form.addEventListener('submit', props.onSubmit(input));
-  }
+  //Feed input to the button
+  form.addEventListener('submit', props.onSubmit(input));
   form.append(input, btn);
   return form;
 }

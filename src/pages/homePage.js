@@ -1,12 +1,12 @@
 import { alertBelow } from '../components/alerter.js';
-import { DEFINITION_TABS_ID, HOME_CONTAINER_QUERY } from '../constants.js';
+import { DEFINITION_TABS_ID, HOME_CONTAINER_CLASS } from '../constants.js';
 import { fetchDefinition } from '../fetchers/definitions.js';
 import router from '../lib/router.js';
 import { C_TYPE } from '../tools/checkType.js';
 import createDefinitionTabsView from '../views/homeTabsView.js';
 import createHomeView from '../views/homeView.js';
 
-const navData = {
+const tabsData = {
 	currentTab: 0,
   word: "",
   navItems: [],
@@ -15,52 +15,51 @@ const navData = {
 }
 
 function createHomePage(tabLocation) {
-  if (tabLocation !== undefined) {
-    searchWordAndUpdateData(tabLocation);
-  }
   const props = {
     onSubmit: btnClickHandler,
   }
   const homeView = createHomeView(props);
-
+  //Means there is / and something in URL so we take it and look up definition
+  if (tabLocation !== undefined) {
+    searchWordAndUpdateData(tabLocation).then(result => {
+      homeView.root.appendChild(result);
+    });
+  }
   return homeView;
 }
 
+//Submit word button handler.
 function btnClickHandler(input) {
   return function(e) {
     e.preventDefault();
-    if (input.value !== navData.word) {
-      resetNavData();
+    if (input.value !== tabsData.word) {
+      resetTabsData();
     }
     router.navigateTo('home', input.value);
   }
 }
 
-function resetNavData() {
-  navData.currentTab = 0;
-  navData.meaningData = [];
-  navData.navItems = [];
-  navData.word = "";
+//Reset data for our definition view
+function resetTabsData() {
+  tabsData.currentTab = 0;
+  tabsData.meaningData = [];
+  tabsData.navItems = [];
+  tabsData.word = "";
 }
 
+//This will check invalid inputs before sending it to API
 async function searchWordAndUpdateData(word) {
   if (checkForInvalids(word) === false) return;
   const searchTerm = word.match(/\b[^\d\W]+\b/);
   try {
     const definitions = await fetchDefinition(searchTerm);
     updateNavData(definitions);
-    createTabsSection();
+    return createTabsSection();
   } catch (error) {
       alertBelow(error.message);
   }
 
 }
-
-function createTabsSection() {
-  const navView = createDefinitionTabsView(navData);
-  document.querySelector(HOME_CONTAINER_QUERY).appendChild(navView);
-}
-
 
 const checkForInvalids = (target) => {
   if (target === undefined) return false;
@@ -86,23 +85,30 @@ const checkForInvalids = (target) => {
 }
 
 function updateNavData(definitions) {
-  navData.word = definitions[0].word;
+  tabsData.word = definitions[0].word;
   definitions[0].meanings.forEach(meaning => {
-    navData.navItems.push(meaning.partOfSpeech);
-    navData.meaningData.push(meaning.definitions);
+    tabsData.navItems.push(meaning.partOfSpeech);
+    tabsData.meaningData.push(meaning.definitions);
   })
+}
+
+function createTabsSection() {
+  const navView = createDefinitionTabsView(tabsData);
+  return navView;
+  //document.querySelector(`.${HOME_CONTAINER_CLASS}`).appendChild(navView);
+}
+
+function tabClickHandler() {
+  tabsData.currentTab = this.value;
+  updateDefinitionTabs();
 }
 
 function updateDefinitionTabs() {
   const defTabs = document.getElementById(DEFINITION_TABS_ID);
-  const homeContainer = document.querySelector(HOME_CONTAINER_QUERY);
+  const homeContainer = document.querySelector(`.${HOME_CONTAINER_CLASS}`);
   homeContainer.removeChild(defTabs);
-  homeContainer.appendChild(createDefinitionTabsView(navData));
+  homeContainer.appendChild(createDefinitionTabsView(tabsData));
 }
 
-function tabClickHandler() {
-  navData.currentTab = this.value;
-  updateDefinitionTabs();
-}
 
 export default createHomePage;

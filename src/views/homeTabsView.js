@@ -1,6 +1,5 @@
-import { DEFINITION_TABS_ID } from "../constants.js";
+import { DEFINITION_TABS_ID, TABS_SECTION_ID } from "../constants.js";
 import { createElement } from "../tools/DOMCreate.js";
-
 const NAVBAR_DEFINITION_ID = 'meaning-tabs';
 
 function createDefinitionTabsView(props) {
@@ -8,22 +7,32 @@ function createDefinitionTabsView(props) {
 	root.innerHTML = String.raw`
 		<h3>${props.word}: </h3>
 	`
+	//If we have nav items, create tabs section.
 	if (props?.navItems) {
-		const nav = createNavItems(props.navItems, props.currentTab, props);
-		root.appendChild(nav);
+		const tabsElement = createTabsSection(props);
+		root.appendChild(tabsElement);
 	}
-	const defView = createDefinitionView(props.meaningData[props.currentTab]);
-	root.appendChild(defView);
 	return root;
 }
 
-function createNavItems(navItems = [], currentTab, propsRef) {
+function createTabsSection(props) {
+	const root = createElement("div", {id: TABS_SECTION_ID});
+	const nav = createTabsBar(props);
+	const defView = createDefinitionView(props.meaningData[props.currentTab]);
+
+	root.append(nav, defView);
+	return root;
+}
+
+function createTabsBar(propsRef) {
 	const root = createElement('nav', {id: NAVBAR_DEFINITION_ID});
 	const ulElement = createElement('ul');
-	navItems.forEach((item, index) => {
+	propsRef.navItems.forEach((item, index) => {
 		const li = createElement('li', {content: `As ${item}`});
+		//If the nav item is the selected item add active class.
+		if (index === propsRef.currentTab) li.classList.add("active");
+		//Value is used later to change tab with click event
 		li.value = index;
-		if (index === currentTab) li.classList.add("active");
 		li.addEventListener('click', propsRef.onClick);
 		ulElement.appendChild(li);
 	});
@@ -33,25 +42,17 @@ function createNavItems(navItems = [], currentTab, propsRef) {
 
 function createDefinitionView(data) {
 	const root = createElement("div", {id: "definition-view"});
-	let rootHTML = String.raw``;
+	let rootHTML = String.raw`
+	<h4>${data.length} Definitions:</h4>`;
 
 	for(let i = 0; i < data.length; ++i) {
 		rootHTML += String.raw`
-		<h4>Definition:</h4>
-		<h3>${data[i].definition}</h3>`
-		if(data[i].synonyms.length > 0) {
-			rootHTML += String.raw`
-				<h4>Synonyms:</h4>
-				<ul>
-					${createSynonymsView(data[i].synonyms)}
-				</ul>`
-		}
-		if (data[i].example) {
-			rootHTML += String.raw`
-				<h4>Example:</h4>
-				<p>${data[i].example}</p>
-			`
-		}
+		<h3>- ${data[i].definition}</h3>`
+		//If definition contains synonyms add them
+		if(data[i].synonyms.length > 0) rootHTML += createSynonymsView(data[i].synonyms);
+		//If definition contains example add it
+		if (data[i].example) rootHTML += createExampleView(data[i].example);
+		//Line separator
 		rootHTML += String.raw`
 			<div class="separator"></div>
 		`
@@ -62,11 +63,27 @@ function createDefinitionView(data) {
 }
 
 function createSynonymsView(synonyms) {
+	return String.raw`
+		<h4>Synonyms:</h4>
+		<ul>
+			${createSynonymsItems(synonyms)}
+		</ul>
+		`
+}
+
+function createSynonymsItems(synonyms) {
 	let outerHtml = String.raw``;
 	synonyms.forEach(example => {
-		outerHtml += String.raw`<li>${example}</li>`;
+		outerHtml += String.raw`<span>${example}, </span>`;
 	})
 	return outerHtml;
+}
+
+function createExampleView(example) {
+	return String.raw`
+		<h4>Example:</h4>
+		<p>${example}</p>
+		`
 }
 
 export default createDefinitionTabsView;
