@@ -4,8 +4,9 @@
  * There should be no reason to make any changes to this file.
  */
 
-import log from './logger.js';
-import createObservableState from './observableState.js';
+import { fromTo } from "../tools/animation.js";
+import log from "./logger.js";
+import createObservableState from "./observableState.js";
 
 /**
  * Navigates to a specified page.
@@ -13,14 +14,14 @@ import createObservableState from './observableState.js';
  * @param {*} params Parameters to be passed to the Page function.
  */
 const navigateTo = (path, ...params) => {
-  log.silly('navigateTo', 'path:', path, 'params:', [...params]);
-  const encodedHash = encodeURI('#' + [path, ...params].join('/'));
+  log.silly("navigateTo", "path:", path, "params:", [...params]);
+  const encodedHash = encodeURI("#" + [path, ...params].join("/"));
   window.location.assign(encodedHash);
 };
 
 const getRouteParts = () => {
-  const [hash, ...rest] = decodeURI(window.location.hash).split('/');
-  const path = hash.replace('#', '');
+  const [hash, ...rest] = decodeURI(window.location.hash).split("/");
+  const path = hash.replace("#", "");
   return [path, ...rest];
 };
 
@@ -40,7 +41,7 @@ function createRouter() {
   const getDefaultRoute = () => {
     const defaultRoute = _routes.find((route) => route.default);
     if (!defaultRoute) {
-      throw new Error('Missing default route in routes table');
+      throw new Error("Missing default route in routes table");
     }
     return defaultRoute;
   };
@@ -51,7 +52,7 @@ function createRouter() {
   // Routes are encoded in the hash part of the document location.
   // We listen for changes to the hash and attempt to load a corresponding
   // page from the `routes` table.
-  window.addEventListener('hashchange', () => {
+  window.addEventListener("hashchange", () => {
     const [pathname, ...params] = getRouteParts();
 
     // Find the page corresponding to the current hash value
@@ -66,23 +67,27 @@ function createRouter() {
     // Create the page corresponding to the route.
     // The page creation function is expected to return its root element
     // in the root property of the returned object.
-    log.debug('router', `loading page: ${pathname}, params: ${[...params]}`);
+    log.debug("router", `loading page: ${pathname}, params: ${[...params]}`);
 
-    if (typeof _currentPage?.update === 'function') {
+    if (typeof _currentPage?.update === "function") {
       // Unsubscribe the current page from the state observable.
       _obsState.unsubscribe(_currentPage.update);
     }
 
     _currentPage = route.page(...params);
-
-    if (typeof _currentPage?.update === 'function') {
+    fromTo(
+      _currentPage.root,
+      { opacity: "0" },
+      { opacity: "1", duration: 0.5 }
+    );
+    if (typeof _currentPage?.update === "function") {
       // Subscribe the new page to the state observable.
       _obsState.subscribe(_currentPage.update);
     }
 
     // Clear the content router outlet container and append the page
     // root element as its new child.
-    _routerOutlet.innerHTML = '';
+    _routerOutlet.innerHTML = "";
     _routerOutlet.appendChild(_currentPage.root);
   }); // end of event handler
 
@@ -102,9 +107,9 @@ function createRouter() {
     _routerOutlet = routerOutlet;
     _obsState.updateState(state);
 
-    if (log.isMinLevel('debug')) {
+    if (log.isMinLevel("debug")) {
       // Log the routes table to the console
-      console.log('Routes Table:');
+      console.log("Routes Table:");
       const displayRoutes = routes.map((route) => ({
         ...route,
         page: route.page.name,
@@ -113,7 +118,7 @@ function createRouter() {
     }
 
     // Kick-start the router
-    window.dispatchEvent(new Event('hashchange'));
+    window.dispatchEvent(new Event("hashchange"));
   };
 
   /**
@@ -122,7 +127,7 @@ function createRouter() {
    */
   const updateState = (updates) => {
     const newState = _obsState.updateState(updates);
-    log.debug('state', newState);
+    log.debug("state", newState);
   };
 
   const { getState } = _obsState;

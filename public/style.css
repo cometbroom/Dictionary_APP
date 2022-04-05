@@ -80,6 +80,13 @@ section.home-container button {
   border: 2px solid gray;
 }
 
+section#def-tabs h3::first-letter {
+  font-family: "Beau Rivage", cursive;
+  text-transform: capitalize;
+  font-size: 1.8em;
+  margin: 0px 10px 0 0;
+}
+
 #router-outlet {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -154,6 +161,16 @@ div#alert-ui {
 #definition-view h3 {
   font-size: 1.2em;
   font-weight: 200;
+}
+
+section.rhymes {
+  grid-column: -2/2;
+  font-size: 1.2em;
+}
+section.rhymes div ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .separator {
