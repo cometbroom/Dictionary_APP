@@ -18,6 +18,7 @@ const rhymesData = {
 function createRhymesPage(targetWord) {
   resetData(targetWord);
   const rhymesView = renderViewWithNav();
+  //If no parameter in URL, create resultless rhymesView.
   if (targetWord === undefined) return rhymesView;
   fetchAndRenderData(targetWord).then((result) => {
     rhymesView.root.appendChild(result);
@@ -27,6 +28,7 @@ function createRhymesPage(targetWord) {
 }
 
 function renderViewWithNav() {
+  //Create navbar and get height of it to adjust rhymes view element.
   const navbarHeight = createNavComponent(RHYMES_INDEX);
   const rhymesView = createRhymesView(rhymesData);
   rhymesView.root.style.top = `${navbarHeight}px`;
@@ -57,6 +59,7 @@ async function fetchAndRenderData(word) {
 
 function populateData(data) {
   data.forEach((rhyme) => {
+    //Obj repesentation that keeps track of every syllable number and how often it's called
     const obj = createSyllableRepresentationObj(rhyme);
     rhymesData.syllableCountList[obj.amount] = obj;
     rhymesData.rhymesOptions.push({
@@ -64,16 +67,20 @@ function populateData(data) {
       syllables: rhyme.syllables,
     });
   });
+  //function that groups words by how many syllables they have
   groupBySyllables();
 }
 
 //This method will create obj that will be unique based on amount of syllables
 //And count the frequency of that syllable occuring.
+//This allows to keep track of our data and render it in an organized way
 function createSyllableRepresentationObj(rhyme) {
   let frequency = 0;
+  //If property already exists, increment frequency.
   if (rhymesData.syllableCountList[rhyme.syllables] !== undefined) {
     frequency = ++rhymesData.syllableCountList[rhyme.syllables].frequency;
   }
+
   const obj = {
     amount: rhyme.syllables,
     frequency: frequency,
@@ -82,6 +89,8 @@ function createSyllableRepresentationObj(rhyme) {
 }
 
 function groupBySyllables() {
+  //Go through each count list 1,2,3 and so on, go in the data and filter by
+  //syllable according to the list's number.
   Object.keys(rhymesData.syllableCountList).forEach((key) => {
     const filteredArray = rhymesData.rhymesOptions.filter(
       (option) => option.syllables == key
@@ -90,6 +99,7 @@ function groupBySyllables() {
   });
 }
 
+//Will fire when a searchTerm is submitted.
 function submitHandler(input) {
   return function (e) {
     e.preventDefault();

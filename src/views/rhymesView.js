@@ -29,30 +29,48 @@ const createFormView = (props) => {
 };
 
 export const createRhymeList = (props) => {
-  const parent = createElement("div");
-  parent.classList.add("rhymes-list");
-  const titleWord = createElement("h2", { content: `${props.word}: ` });
-  parent.appendChild(titleWord);
+  const root = initializeDataView(props);
   const syllableCount = props.syllableCountList;
+
+  //Iterate throught our syllabble list and create title for results.
   Object.keys(syllableCount).forEach((key) => {
-    const title = createElement("h2", {
-      content: `${syllableCount[key].amount} Syllables:`,
-    });
-    const list = createSyllableList(key, syllableCount);
-    parent.append(title, list);
+    createDataView(syllableCount, key, root);
   });
-  return parent;
+  return root;
 };
 
+//Create initial data holder elements
+function initializeDataView(props) {
+  const root = createElement("div", { class: "rhymes-list" });
+  const titleWord = createElement("h2", { content: `${props.word}: ` });
+  root.appendChild(titleWord);
+  return root;
+}
+
+//Create title and list of reset and add to our root
+function createDataView(syllableCount, key, root) {
+  const title = createElement("h2", {
+    content: `${syllableCount[key].amount} Syllables:`,
+  });
+  const list = createSyllableList(key, syllableCount);
+  root.append(title, list);
+}
+
+//Create list of rhyme word results
 function createSyllableList(key, syllableCount) {
   const ul = createElement("ul");
   let separator = ", ";
+  //For each rhyme word separator would be , except for last.
   syllableCount[key].words.forEach((options, index) => {
     if (index === syllableCount[key].frequency) separator = ".";
-    options.content += separator;
-    const li = createElement("li", options);
-    ul.appendChild(li);
+    appendWordView(options, separator, ul);
   });
 
   return ul;
+}
+
+function appendWordView(options, separator, ul) {
+  options.content += separator;
+  const li = createElement("li", options);
+  ul.appendChild(li);
 }

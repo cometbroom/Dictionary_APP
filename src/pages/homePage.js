@@ -13,8 +13,10 @@ import createDefinitionTabsView from "../views/homeTabsView.js";
 import createHomeView from "../views/homeView.js";
 
 /*
+ * TODO: Loading screen when calling API.
  * TODO: Make footer.
  * TODO: Refactor this, rhymesPage
+ * TODO: Opacity animation doesn't have to go for word search.
  */
 
 //Data to keep track of current tab, current word, options and etc.
@@ -113,8 +115,13 @@ export const checkForInvalids = (target, dontAlert = false) => {
 };
 
 function updateNavData(definitions) {
+  //Set word from api to our data
   tabsData.word = definitions[0].word;
+
+  //If data isn't reset and already contain something, break
   if (tabsData.tabOptions?.length > 0) return;
+
+  //Populate our data with our api results
   definitions[0].meanings.forEach((meaning) => {
     tabsData.tabOptions.push({
       content: `As ${meaning.partOfSpeech}`,
@@ -127,7 +134,6 @@ function updateNavData(definitions) {
 function createTabsSection() {
   const navView = createDefinitionTabsView(tabsData);
   return navView;
-  //document.querySelector(`.${HOME_CONTAINER_CLASS}`).appendChild(navView);
 }
 
 function tabClickHandler() {
@@ -136,15 +142,23 @@ function tabClickHandler() {
 }
 
 function updateDefinitionTabs() {
-  const defTabs = document.getElementById(DEFINITION_TABS_ID);
-  const oldScrollHeight =
-    document.getElementById(DEFINITION_RESULT_ID).scrollHeight;
+  updateDefinitionView();
+  const definitionResultView = document.getElementById(DEFINITION_RESULT_ID);
+  const oldScrollHeight = definitionResultView.scrollHeight;
+  animateView(oldScrollHeight, definitionResultView);
+}
+
+function updateDefinitionView() {
+  //Get our home container element
   const homeContainer = document.querySelector(`.${HOME_CONTAINER_CLASS}`);
+  //Get definition tabs element
+  const defTabs = document.getElementById(DEFINITION_TABS_ID);
+  //Remove old definition tabs view and append newly created one.
   homeContainer.removeChild(defTabs);
   const defTabsNew = createDefinitionTabsView(tabsData);
   homeContainer.appendChild(defTabsNew);
+  
   defTabsNew.scrollIntoView({ behavior: "smooth" });
-  animateView(oldScrollHeight, document.getElementById(DEFINITION_RESULT_ID));
 }
 
 function animateView(oldScrollHeight, defTabsNew) {
