@@ -6,8 +6,12 @@ const navData = {
   current: 0,
   navOptions: [
     { content: "Meaning", value: 0, onClick: navClickHandler },
-    { content: "Rhymes", value: 1, onClick: navClickHandler },
-    { content: "Study your word" },
+    {
+      innerHTML: String.raw`
+        <img id="logo" src='./public/logoWords.svg'>
+      `,
+    },
+    { content: "Rhymes", value: 2, onClick: navClickHandler },
   ],
 };
 
@@ -35,7 +39,7 @@ function navClickHandler() {
     case 0:
       router.navigateTo("home", ...rest);
       break;
-    case 1:
+    case 2:
       router.navigateTo("rhymes", ...rest);
       break;
   }

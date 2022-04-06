@@ -11,14 +11,22 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   color: rgba(24, 24, 24, 0.966);
   overflow-y: scroll;
+  font-size: 1.3em;
+  padding: 0;
 }
 :root {
-  --color1-purple: #7a5bfb;
+  --color1-purple: #4a1ffe;
   --color2-blue: #62edf7;
 }
 
 section {
   padding: 20px 0px;
+}
+
+#router-outlet {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  width: 100%;
 }
 
 nav.header {
@@ -33,6 +41,13 @@ nav.header ul {
   list-style: none;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  padding: 0;
+}
+
+#logo {
+  height: 100%;
 }
 
 nav.header li {
@@ -40,17 +55,38 @@ nav.header li {
   font-size: 1.5em;
   padding: 10px 0px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 nav.header ul li:hover {
   filter: saturate(2);
   transform: scaleY(1.01);
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid black;
+}
+
+#website-description {
+  font-size: 1.6em;
+  padding: 30px 0;
+  margin-bottom: 20px;
+}
+
+#website-description h1 {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 section.home-container {
   grid-column: 2/-2;
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-row-gap: 20px;
+}
+section.home-container :nth-child(n) {
+  grid-column: span 10;
 }
 section.home-container form {
   padding: 20px 0px;
@@ -85,12 +121,6 @@ section#def-tabs h3::first-letter {
   text-transform: capitalize;
   font-size: 1.8em;
   margin: 0px 10px 0 0;
-}
-
-#router-outlet {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  width: 100%;
 }
 
 div#alert-ui {
@@ -141,7 +171,7 @@ div#alert-ui {
 #meaning-tabs ul li:hover {
   filter: brightness(1.2);
   transform: scaleY(1.01);
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid black;
 }
 
 #definition-view {
@@ -185,7 +215,7 @@ section.rhymes div ul {
 .active {
   filter: brightness(1.2);
   transform: scaleY(1.01);
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid black;
 }
 
 @media (min-width: 960px) {
