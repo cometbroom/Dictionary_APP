@@ -318,7 +318,42 @@ section.error h2 {
     animation-name: spinning;
     animation-duration: 3s;
     animation-iteration-count: infinite;
-    /* linear | ease | ease-in | ease-out | ease-in-out */
     animation-timing-function: linear;
+  }
+}
+
+@media (max-width: 620px) {
+  * {
+    padding: 0 5px;
+  }
+  nav.header {
+    position: absolute;
+  }
+  nav.header ul {
+    height: 50px;
+  }
+  nav.header li {
+    font-size: 1.1em;
+  }
+  div.description {
+    font-size: 1.2em;
+  }
+  #rhyme-description h1 {
+    font-size: 1.5em;
+  }
+
+  section.home-container {
+    grid-column: 1/-1;
+  }
+
+  #meaning-tabs ul li {
+    font-size: 0.7em;
+  }
+
+  section.rhymes {
+    grid-column: -1/1;
+  }
+
+  section.error {
   }
 }
