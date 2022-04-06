@@ -321,6 +321,14 @@ section.error h2 {
     animation-timing-function: linear;
   }
 }
+@media (max-width: 890px) {
+  * {
+    padding: 0 5px;
+  }
+  #meaning-tabs ul li {
+    font-size: 1.2em;
+  }
+}
 
 @media (max-width: 620px) {
   * {
