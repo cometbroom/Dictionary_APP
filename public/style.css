@@ -67,13 +67,13 @@ nav.header ul li:hover {
   border-bottom: 3px solid black;
 }
 
-#website-description {
+div.description {
   font-size: 1.6em;
   padding: 30px 0;
   margin-bottom: 20px;
 }
 
-#website-description h1 {
+div.description h1 {
   margin-bottom: 20px;
   text-align: center;
 }
@@ -88,26 +88,27 @@ section.home-container {
 section.home-container :nth-child(n) {
   grid-column: span 10;
 }
-section.home-container form {
+form {
   padding: 20px 0px;
   display: flex;
   gap: 10px;
   width: 100%;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-section.home-container input {
+input {
   padding: 10px;
   flex: 3;
   font-size: 1.2em;
   border: none;
   border-bottom: 2px solid gray;
 }
-section.home-container input:focus {
+input:focus {
   border: none;
   border-bottom: 2px solid gray;
 }
-section.home-container button {
+button {
   padding: 10px;
   font-size: 1.2em;
   flex: 2;
@@ -196,11 +197,41 @@ div#alert-ui {
 section.rhymes {
   grid-column: -2/2;
   font-size: 1.2em;
+  grid-column: 2/-2;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-row-gap: 20px;
+}
+
+section.rhymes :nth-child(n) {
+  grid-column: span 10;
 }
 section.rhymes div ul {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
+}
+
+form.rhymes label {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+form.rhymes :nth-child(1) {
+  width: 100%;
+}
+
+section.rhymes h2 {
+  padding-bottom: 20px;
+  font-size: 2em;
+}
+
+section.rhymes h2::first-letter {
+  font-family: "Beau Rivage", cursive;
+  text-transform: capitalize;
+  font-size: 1.8em;
+  margin: 0px 10px 0 0;
 }
 
 .separator {

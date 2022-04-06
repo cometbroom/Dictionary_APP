@@ -7,6 +7,7 @@ const rhymesData = {
   word: "",
   rhymesOptions: [],
   syllableCountList: {},
+  onSubmit: submitHandler,
 };
 
 //This function can't be async
@@ -77,6 +78,16 @@ function groupBySyllables() {
     );
     rhymesData.syllableCountList[key].words = filteredArray;
   });
+}
+
+function submitHandler(input) {
+  return function (e) {
+    e.preventDefault();
+    if (input.value !== rhymesData.word) {
+      resetData();
+    }
+    router.navigateTo("rhymes", input.value);
+  };
 }
 
 export default createRhymesPage;

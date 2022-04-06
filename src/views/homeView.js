@@ -5,7 +5,7 @@ function createHomeView(props) {
   const root = document.createElement("section");
   root.className = HOME_CONTAINER_CLASS;
   root.innerHTML = String.raw`
-    <div id="${SITE_DESCRIPTION_ID}">
+    <div id="${SITE_DESCRIPTION_ID}" class="description">
       <h1>Word Analyzer</h1>
       <p>
         Word analyzer is a website that allows you to analyze words further.
