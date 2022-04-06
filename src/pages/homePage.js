@@ -1,5 +1,5 @@
 import { alertBelow } from "../components/alerter.js";
-import createNavComponent from "../components/navbar.js";
+import createNavComponent, { MEANING_INDEX } from "../components/navbar.js";
 import { DEFINITION_TABS_ID, HOME_CONTAINER_CLASS } from "../constants.js";
 import { fetchDefinition } from "../fetchers/definitions.js";
 import router from "../lib/router.js";
@@ -19,7 +19,7 @@ function createHomePage(wordInput, tabLocation) {
   const props = {
     onSubmit: btnClickHandler,
   };
-  createNavComponent();
+  createNavComponent(MEANING_INDEX);
   resetTabsData();
   const homeView = createHomeView(props);
   if (tabLocation !== undefined) tabsData.currentTab = tabLocation;

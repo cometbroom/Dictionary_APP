@@ -1,6 +1,7 @@
-import createNavComponent from "../components/navbar.js";
+import createNavComponent, { RHYMES_INDEX } from "../components/navbar.js";
 import { fetchRhymes } from "../fetchers/rhymes.js";
 import router from "../lib/router.js";
+import { fromTo } from "../tools/animation.js";
 import { createRhymesView, createRhymeList } from "../views/rhymesView.js";
 
 const rhymesData = {
@@ -14,13 +15,19 @@ const rhymesData = {
 //Create the page's title in sync
 //then append data async using another view function.
 function createRhymesPage(targetWord) {
-  createNavComponent();
+  createNavComponent(RHYMES_INDEX);
   resetData();
-  rhymesData.word = targetWord;
+  rhymesData.word = targetWord ? targetWord : "";
   const rhymesView = createRhymesView(rhymesData);
+  if (targetWord === undefined) return rhymesView;
   fetchAndRenderData(targetWord)
     .then((result) => {
       rhymesView.root.appendChild(result);
+      fromTo(
+        result,
+        { maxHeight: "0px" },
+        { maxHeight: `${result.scrollHeight}px`, duration: 0.5 }
+      );
     })
     .catch((error) => {
       router.navigateTo("error", error.message);
@@ -60,7 +67,7 @@ function populateData(data) {
 //This method will create obj that will be unique based on amount of syllables
 //And count the frequency of that syllable occuring.
 function createSyllableRepresentationObj(rhyme) {
-  let frequency = 1;
+  let frequency = 0;
   if (rhymesData.syllableCountList[rhyme.syllables] !== undefined) {
     frequency = ++rhymesData.syllableCountList[rhyme.syllables].frequency;
   }

@@ -234,6 +234,10 @@ section.rhymes h2::first-letter {
   margin: 0px 10px 0 0;
 }
 
+div.rhymes-list {
+  overflow: hidden;
+}
+
 .separator {
   border-top: 1px solid #afafaf;
   width: 80%;

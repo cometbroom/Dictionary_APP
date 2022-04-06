@@ -31,6 +31,7 @@ const createFormView = (props) => {
 
 export const createRhymeList = (props) => {
   const parent = createElement("div");
+  parent.classList.add("rhymes-list");
   const syllableCount = props.syllableCountList;
   Object.keys(syllableCount).forEach((key) => {
     const title = createElement("h2", {
@@ -44,7 +45,10 @@ export const createRhymeList = (props) => {
 
 function createSyllableList(key, syllableCount) {
   const ul = createElement("ul");
-  syllableCount[key].words.forEach((options) => {
+  let separator = ", ";
+  syllableCount[key].words.forEach((options, index) => {
+    if (index === syllableCount[key].frequency) separator = ".";
+    options.content += separator;
     const li = createElement("li", options);
     ul.appendChild(li);
   });
