@@ -80,23 +80,23 @@ async function searchWordAndUpdateData(word) {
   }
 }
 
-const checkForInvalids = (target) => {
+export const checkForInvalids = (target, dontAlert = false) => {
   if (target === undefined) return false;
   if (target == "") {
-    alertBelow("Please enter something");
+    dontAlert || alertBelow("Please enter something");
     return false;
   }
   if (C_TYPE.isNumberedString(target)) {
-    alertBelow("Numbers aren't allowed");
+    dontAlert || alertBelow("Numbers aren't allowed");
     return false;
   }
   if (!C_TYPE.isString) {
-    alertBelow("Enter a string");
+    dontAlert || alertBelow("Enter a string");
     return false;
   }
   const checkTerm = target.match(/\b[^\d\W]+\b/);
   if (checkTerm === null) {
-    alertBelow("Input invalid");
+    dontAlert || alertBelow("Input invalid");
     return false;
   }
 

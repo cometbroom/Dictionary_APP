@@ -10,8 +10,7 @@ export const createRhymesView = (props) => {
   </div>
   `;
   const form = createFormView(props);
-  const title = createElement("h2", { content: `${props.word}: ` });
-  root.append(form, title);
+  root.append(form);
   return { root };
 };
 
@@ -32,6 +31,8 @@ const createFormView = (props) => {
 export const createRhymeList = (props) => {
   const parent = createElement("div");
   parent.classList.add("rhymes-list");
+  const titleWord = createElement("h2", { content: `${props.word}: ` });
+  parent.appendChild(titleWord);
   const syllableCount = props.syllableCountList;
   Object.keys(syllableCount).forEach((key) => {
     const title = createElement("h2", {

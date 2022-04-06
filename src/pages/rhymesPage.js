@@ -3,6 +3,7 @@ import { fetchRhymes } from "../fetchers/rhymes.js";
 import router from "../lib/router.js";
 import { fromTo } from "../tools/animation.js";
 import { createRhymesView, createRhymeList } from "../views/rhymesView.js";
+import { checkForInvalids } from "./homePage.js";
 
 const rhymesData = {
   word: "",
@@ -18,14 +19,10 @@ function createRhymesPage(targetWord) {
   resetData(targetWord);
   const rhymesView = renderViewWithNav();
   if (targetWord === undefined) return rhymesView;
-  fetchAndRenderData(targetWord)
-    .then((result) => {
-      rhymesView.root.appendChild(result);
-      animateResult(result);
-    })
-    .catch((error) => {
-      router.navigateTo("error", error.message);
-    });
+  fetchAndRenderData(targetWord).then((result) => {
+    rhymesView.root.appendChild(result);
+    animateResult(result);
+  });
   return rhymesView;
 }
 
@@ -47,6 +44,7 @@ function resetData(targetWord) {
 }
 
 async function fetchAndRenderData(word) {
+  if (checkForInvalids(word) === false) return;
   try {
     const data = await fetchRhymes(word);
     populateData(data);

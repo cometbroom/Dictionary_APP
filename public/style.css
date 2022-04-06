@@ -224,6 +224,7 @@ section.rhymes {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-row-gap: 20px;
+  position: relative;
 }
 
 section.rhymes :nth-child(n) {

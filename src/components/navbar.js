@@ -1,5 +1,6 @@
 import { NAVBAR_SECTION_QUERY } from "../constants.js";
 import router from "../lib/router.js";
+import { checkForInvalids } from "../pages/homePage.js";
 import { createElement } from "../tools/DOMCreate.js";
 
 export const MEANING_INDEX = 0;
@@ -43,11 +44,19 @@ function navClickHandler() {
   navData.current = this.value;
   switch (this.value) {
     case 0:
-      router.navigateTo("home", ...rest);
+      navigateToPage("home", ...rest);
       break;
     case 2:
-      router.navigateTo("rhymes", ...rest);
+      navigateToPage("rhymes", ...rest);
       break;
+  }
+}
+
+function navigateToPage(location, ...params) {
+  if ([...params].some((item) => checkForInvalids(item, true) === false)) {
+    router.navigateTo(location);
+  } else {
+    router.navigateTo(location, ...params);
   }
 }
 
