@@ -1,5 +1,6 @@
 import fetchData from "../lib/fetchData.js";
 import log from "../lib/logger.js";
+import router from "../lib/router.js";
 
 const RHYMES_API_URL = "https://rhymebrain.com/talk?function=getRhymes&word=";
 
@@ -9,5 +10,6 @@ export const fetchRhymes = async (word) => {
     return data;
   } catch (error) {
     log.error(error.message, "from ", RHYMES_API_URL);
+    router.navigateTo("error", error.message);
   }
 };

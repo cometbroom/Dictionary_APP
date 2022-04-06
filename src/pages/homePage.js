@@ -12,6 +12,13 @@ import { C_TYPE } from "../tools/checkType.js";
 import createDefinitionTabsView from "../views/homeTabsView.js";
 import createHomeView from "../views/homeView.js";
 
+/*
+ * TODO: Make footer.
+ * TODO: Refactor this, rhymesPage
+ */
+
+//Data to keep track of current tab, current word, options and etc.
+//Passed on to view.
 const tabsData = {
   currentTab: 0,
   word: "",
@@ -22,10 +29,8 @@ const tabsData = {
 
 function createHomePage(wordInput, tabLocation) {
   resetTabsData();
-  const props = {
-    onSubmit: btnClickHandler,
-  };
-  const homeView = renderViewWithNav(props);
+  const homeView = renderViewWithNav({ onSubmit: btnClickHandler });
+
   if (tabLocation !== undefined) tabsData.currentTab = tabLocation;
   //Means there is / and something in URL so we take it and look up definition
   if (wordInput !== undefined) {
@@ -38,6 +43,7 @@ function createHomePage(wordInput, tabLocation) {
 }
 
 function renderViewWithNav(props) {
+  //create fixed position nav component while getting height to readjust of view.
   const navbarHeight = createNavComponent(MEANING_INDEX);
   const homeView = createHomeView(props);
   homeView.root.style.top = `${navbarHeight}px`;
@@ -52,9 +58,8 @@ function animateResult(result) {
 function btnClickHandler(input) {
   return function (e) {
     e.preventDefault();
-    if (input.value !== tabsData.word) {
-      resetTabsData();
-    }
+    //If same word is passed, then no need for reset.
+    if (input.value !== tabsData.word) resetTabsData();
     router.navigateTo("home", input.value);
   };
 }
@@ -69,17 +74,21 @@ function resetTabsData() {
 
 //This will check invalid inputs before sending it to API
 async function searchWordAndUpdateData(word) {
+  //If word is invalid, don't send to API.
   if (checkForInvalids(word) === false) return;
   const searchTerm = word.match(/\b[^\d\W]+\b/);
   try {
     const definitions = await fetchDefinition(searchTerm);
     updateNavData(definitions);
+    //Return tabs section as promise to append to DOM.
     return createTabsSection();
   } catch (error) {
     alertBelow(error.message);
+    router.navigateTo("error", `"${word}" not found.`);
   }
 }
 
+//Checking for invalid inputs
 export const checkForInvalids = (target, dontAlert = false) => {
   if (target === undefined) return false;
   if (target == "") {

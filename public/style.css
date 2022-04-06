@@ -265,6 +265,10 @@ div.rhymes-list ul li {
   font-size: 1.5em;
 }
 
+section.error {
+  position: relative;
+}
+
 .separator {
   border-top: 1px solid #afafaf;
   width: 80%;

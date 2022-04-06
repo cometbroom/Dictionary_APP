@@ -7,6 +7,7 @@ export const MEANING_INDEX = 0;
 export const LOGO_INDEX = 1;
 export const RHYMES_INDEX = 2;
 
+//Data to keep track of active and content
 const navData = {
   current: 0,
   navOptions: [
@@ -21,42 +22,57 @@ const navData = {
 };
 
 function createNavComponent(activeTab) {
+  //Reset our previous header
   const sectionHeader = document.querySelector(NAVBAR_SECTION_QUERY);
   sectionHeader.innerHTML = "";
+
+  //Conditionally set our active tab
   if (activeTab) navData.current = activeTab;
+
   const navItems = createNavItems(navData);
   sectionHeader.appendChild(navItems);
+
   return sectionHeader.clientHeight;
 }
 
 function createNavItems(props) {
   const ul = createElement("ul");
+
+  //For each option in our navData, create list.
   props.navOptions.forEach((option, index) => {
     const li = createElement("li", option);
+
     if (props.current === index) li.classList.add("active");
+
     ul.appendChild(li);
   });
+
   return ul;
 }
 
 function navClickHandler() {
-  const [, ...rest] = decodeURI(window.location.hash).split("/");
+  //Decode URL of click
+  const [currentHash, ...rest] = decodeURI(window.location.hash).split("/");
   navData.current = this.value;
-  switch (this.value) {
+  switch (navData.current) {
     case 0:
-      navigateToPage("home", ...rest);
+      navigateToPage(currentHash, "home", ...rest);
       break;
     case 2:
-      navigateToPage("rhymes", ...rest);
+      navigateToPage(currentHash, "rhymes", ...rest);
       break;
   }
 }
 
-function navigateToPage(location, ...params) {
-  if ([...params].some((item) => checkForInvalids(item, true) === false)) {
-    router.navigateTo(location);
+function navigateToPage(currentHash, targetHash, ...params) {
+  //If invalid in params or in error page, don't pass params to apps.
+  if (
+    [...params].some((item) => checkForInvalids(item, true) === false) ||
+    currentHash == "#error"
+  ) {
+    router.navigateTo(targetHash);
   } else {
-    router.navigateTo(location, ...params);
+    router.navigateTo(targetHash, ...params);
   }
 }
 
