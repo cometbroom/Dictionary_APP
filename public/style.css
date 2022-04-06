@@ -35,6 +35,8 @@ nav.header {
   background-color: var(--color1-purple);
   padding: 2px 0px;
   color: white;
+  position: fixed;
+  z-index: 5;
 }
 
 nav.header ul {
@@ -84,6 +86,7 @@ section.home-container {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-row-gap: 20px;
+  position: relative;
 }
 section.home-container :nth-child(n) {
   grid-column: span 10;
@@ -114,7 +117,26 @@ button {
   flex: 2;
   cursor: pointer;
   border-radius: 5px;
-  border: 2px solid gray;
+  border: none;
+  background-color: var(--color1-purple);
+  color: white;
+  box-shadow: 0px 1px 7px rgb(66, 66, 66);
+  transition: transform 0.3s ease, box-shadow 0.3s;
+}
+button:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 5px 7px rgb(66, 66, 66);
+}
+div#definition-view {
+  overflow: hidden;
+}
+
+#tabs-section {
+  padding: 0;
+}
+
+section#def-tabs {
+  position: relative;
 }
 
 section#def-tabs h3::first-letter {
@@ -235,7 +257,11 @@ section.rhymes h2::first-letter {
 }
 
 div.rhymes-list {
-  overflow: hidden;
+  position: relative;
+}
+
+div.rhymes-list ul li {
+  font-size: 1.5em;
 }
 
 .separator {

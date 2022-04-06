@@ -46,21 +46,24 @@ const animate = (
   const animationHolder = (timestamp) => {
     if (start === undefined) start = timestamp;
     const elapsed = timestamp - start;
-    const STEP_SIZE = getStepSize(COEFFICIENT, elapsed);
     if (elapsed >= duration * 1000) advance = false;
-    targetElement.style[property] = `${startValue + STEP_SIZE}${SUFFIX}`;
+    const STEP_SIZE = getStepSize(COEFFICIENT, elapsed, duration * 1000);
+    const currentValue = startValue + STEP_SIZE;
+    targetElement.style[property] = `${currentValue}${SUFFIX}`;
     advance && window.requestAnimationFrame(animationHolder);
   };
-  setTimeout(() => {
-    window.cancelAnimationFrame(animationHolder);
-  }, 100);
-  window.requestAnimationFrame(animationHolder);
+  if (advance) window.requestAnimationFrame(animationHolder);
 };
 
 const getCoefficient = (range, duration) => {
   return range / (duration * 1000);
 };
 
-const getStepSize = (COEFFICIENT, elapsed) => {
-  return COEFFICIENT * elapsed;
+const getStepSize = (COEFFICIENT, elapsed, durationMs) => {
+  //Fix computer imperfection by a few epsilons by manually entering end time
+  if (elapsed >= durationMs) {
+    return COEFFICIENT * durationMs;
+  } else {
+    return COEFFICIENT * elapsed;
+  }
 };

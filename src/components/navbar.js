@@ -3,6 +3,7 @@ import router from "../lib/router.js";
 import { createElement } from "../tools/DOMCreate.js";
 
 export const MEANING_INDEX = 0;
+export const LOGO_INDEX = 1;
 export const RHYMES_INDEX = 2;
 
 const navData = {
@@ -24,13 +25,13 @@ function createNavComponent(activeTab) {
   if (activeTab) navData.current = activeTab;
   const navItems = createNavItems(navData);
   sectionHeader.appendChild(navItems);
+  return sectionHeader.clientHeight;
 }
 
 function createNavItems(props) {
   const ul = createElement("ul");
   props.navOptions.forEach((option, index) => {
     const li = createElement("li", option);
-    console.log(props.current);
     if (props.current === index) li.classList.add("active");
     ul.appendChild(li);
   });

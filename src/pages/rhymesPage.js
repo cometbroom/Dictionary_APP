@@ -15,19 +15,13 @@ const rhymesData = {
 //Create the page's title in sync
 //then append data async using another view function.
 function createRhymesPage(targetWord) {
-  createNavComponent(RHYMES_INDEX);
-  resetData();
-  rhymesData.word = targetWord ? targetWord : "";
-  const rhymesView = createRhymesView(rhymesData);
+  resetData(targetWord);
+  const rhymesView = renderViewWithNav();
   if (targetWord === undefined) return rhymesView;
   fetchAndRenderData(targetWord)
     .then((result) => {
       rhymesView.root.appendChild(result);
-      fromTo(
-        result,
-        { maxHeight: "0px" },
-        { maxHeight: `${result.scrollHeight}px`, duration: 0.5 }
-      );
+      animateResult(result);
     })
     .catch((error) => {
       router.navigateTo("error", error.message);
@@ -35,8 +29,19 @@ function createRhymesPage(targetWord) {
   return rhymesView;
 }
 
-function resetData() {
-  rhymesData.word = "";
+function renderViewWithNav() {
+  const navbarHeight = createNavComponent(RHYMES_INDEX);
+  const rhymesView = createRhymesView(rhymesData);
+  rhymesView.root.style.top = `${navbarHeight}px`;
+  return rhymesView;
+}
+
+function animateResult(result) {
+  fromTo(result, { left: "100%" }, { left: "0%", duration: 0.3 });
+}
+
+function resetData(targetWord) {
+  rhymesData.word = targetWord ? targetWord : "";
   rhymesData.rhymesOptions = [];
   rhymesData.syllableCountList = {};
 }

@@ -1,8 +1,13 @@
 import { alertBelow } from "../components/alerter.js";
 import createNavComponent, { MEANING_INDEX } from "../components/navbar.js";
-import { DEFINITION_TABS_ID, HOME_CONTAINER_CLASS } from "../constants.js";
+import {
+  DEFINITION_RESULT_ID,
+  DEFINITION_TABS_ID,
+  HOME_CONTAINER_CLASS,
+} from "../constants.js";
 import { fetchDefinition } from "../fetchers/definitions.js";
 import router from "../lib/router.js";
+import { fromTo } from "../tools/animation.js";
 import { C_TYPE } from "../tools/checkType.js";
 import createDefinitionTabsView from "../views/homeTabsView.js";
 import createHomeView from "../views/homeView.js";
@@ -16,20 +21,31 @@ const tabsData = {
 };
 
 function createHomePage(wordInput, tabLocation) {
+  resetTabsData();
   const props = {
     onSubmit: btnClickHandler,
   };
-  createNavComponent(MEANING_INDEX);
-  resetTabsData();
-  const homeView = createHomeView(props);
+  const homeView = renderViewWithNav(props);
   if (tabLocation !== undefined) tabsData.currentTab = tabLocation;
   //Means there is / and something in URL so we take it and look up definition
   if (wordInput !== undefined) {
     searchWordAndUpdateData(wordInput).then((result) => {
       homeView.root.appendChild(result);
+      animateResult(result);
     });
   }
   return homeView;
+}
+
+function renderViewWithNav(props) {
+  const navbarHeight = createNavComponent(MEANING_INDEX);
+  const homeView = createHomeView(props);
+  homeView.root.style.top = `${navbarHeight}px`;
+  return homeView;
+}
+
+function animateResult(result) {
+  fromTo(result, { left: "100%" }, { left: "0%", duration: 0.3 });
 }
 
 //Submit word button handler.
@@ -112,9 +128,22 @@ function tabClickHandler() {
 
 function updateDefinitionTabs() {
   const defTabs = document.getElementById(DEFINITION_TABS_ID);
+  const oldScrollHeight =
+    document.getElementById(DEFINITION_RESULT_ID).scrollHeight;
   const homeContainer = document.querySelector(`.${HOME_CONTAINER_CLASS}`);
   homeContainer.removeChild(defTabs);
-  homeContainer.appendChild(createDefinitionTabsView(tabsData));
+  const defTabsNew = createDefinitionTabsView(tabsData);
+  homeContainer.appendChild(defTabsNew);
+  defTabsNew.scrollIntoView({ behavior: "smooth" });
+  animateView(oldScrollHeight, document.getElementById(DEFINITION_RESULT_ID));
+}
+
+function animateView(oldScrollHeight, defTabsNew) {
+  fromTo(
+    defTabsNew,
+    { height: `${oldScrollHeight}px` },
+    { height: `${defTabsNew.scrollHeight}px`, duration: 0.2 }
+  );
 }
 
 export default createHomePage;
