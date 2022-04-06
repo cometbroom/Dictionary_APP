@@ -32,7 +32,7 @@ export const createRhymeList = (props) => {
   const root = initializeDataView(props);
   const syllableCount = props.syllableCountList;
 
-  //Iterate throught our syllabble list and create title for results.
+  //Iterate through our syllable list and create title for results.
   Object.keys(syllableCount).forEach((key) => {
     createDataView(syllableCount, key, root);
   });

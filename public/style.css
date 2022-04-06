@@ -267,6 +267,27 @@ div.rhymes-list ul li {
 
 section.error {
   position: relative;
+  grid-column: -2/ 2;
+  text-align: center;
+  font-size: 2em;
+}
+.error-card {
+  background-color: var(--color1-purple);
+  color: white;
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 6px;
+}
+section.error i {
+  color: red;
+  font-size: 4em;
+}
+section.error h1,
+section.error h2 {
+  font-weight: 200;
 }
 
 .separator {

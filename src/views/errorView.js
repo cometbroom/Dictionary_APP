@@ -2,10 +2,11 @@ import { createElement } from "../tools/DOMCreate.js";
 
 function createErrorView(props) {
   const root = createElement("section", { class: "error" });
-  const status = props?.status ? props.status : "";
   root.innerHTML = String.raw`
-    <h1>Error ${status}: </h1>
+  <div class="error-card">
+    <i class="fa-solid fa-bug"> </i>
     <h2>${props.content}</h2>
+  </div>
   `;
 
   return { root };

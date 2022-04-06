@@ -14,13 +14,10 @@ const rhymesData = {
   onSubmit: submitHandler,
 };
 
-//This function can't be async
-//Create the page's title in sync
-//then append data async using another view function.
 function createRhymesPage(targetWord) {
   resetData(targetWord);
   const rhymesView = renderViewWithNav();
-  //If no parameter in URL, create resultless rhymesView.
+  //If no parameter in URL, create rhymesView without result.
   if (targetWord === undefined) return rhymesView;
   const loadingInterval = getLoadingScreen(rhymesView.root);
   fetchAndRenderData(targetWord).then((result) => {
@@ -69,7 +66,7 @@ async function fetchAndRenderData(word) {
 
 function populateData(data) {
   data.forEach((rhyme) => {
-    //Obj repesentation that keeps track of every syllable number and how often it's called
+    //Obj representation that keeps track of every syllable number and how often it's called
     const obj = createSyllableRepresentationObj(rhyme);
     rhymesData.syllableCountList[obj.amount] = obj;
     rhymesData.rhymesOptions.push({
@@ -82,7 +79,7 @@ function populateData(data) {
 }
 
 //This method will create obj that will be unique based on amount of syllables
-//And count the frequency of that syllable occuring.
+//And count the frequency of that syllable occurring.
 //This allows to keep track of our data and render it in an organized way
 function createSyllableRepresentationObj(rhyme) {
   let frequency = 0;
