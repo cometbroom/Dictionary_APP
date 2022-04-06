@@ -20,7 +20,7 @@ const createFormView = (props) => {
     content: "Which word would you like the rhymes for?",
   });
   const input = createElement("input", { type: "text" });
-  const btn = createElement("button", { content: "Define", type: "submit" });
+  const btn = createElement("button", { content: "Search", type: "submit" });
 
   //Feed input to the button
   form.addEventListener("submit", props.onSubmit(input));

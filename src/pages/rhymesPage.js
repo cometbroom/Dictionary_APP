@@ -1,4 +1,6 @@
+import getLoadingScreen from "../components/loading.js";
 import createNavComponent, { RHYMES_INDEX } from "../components/navbar.js";
+import { LOADING_SCREEN_QUERY } from "../constants.js";
 import { fetchRhymes } from "../fetchers/rhymes.js";
 import router from "../lib/router.js";
 import { fromTo } from "../tools/animation.js";
@@ -20,11 +22,19 @@ function createRhymesPage(targetWord) {
   const rhymesView = renderViewWithNav();
   //If no parameter in URL, create resultless rhymesView.
   if (targetWord === undefined) return rhymesView;
+  const loadingInterval = getLoadingScreen(rhymesView.root);
   fetchAndRenderData(targetWord).then((result) => {
+    removeLoadingScreen(loadingInterval, rhymesView.root);
     rhymesView.root.appendChild(result);
     animateResult(result);
   });
   return rhymesView;
+}
+
+function removeLoadingScreen(intervalId, rootElement) {
+  const loadingDisplay = document.querySelector(LOADING_SCREEN_QUERY);
+  rootElement.removeChild(loadingDisplay);
+  clearInterval(intervalId);
 }
 
 function renderViewWithNav() {

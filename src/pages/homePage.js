@@ -1,9 +1,11 @@
 import { alertBelow } from "../components/alerter.js";
+import getLoadingScreen from "../components/loading.js";
 import createNavComponent, { MEANING_INDEX } from "../components/navbar.js";
 import {
   DEFINITION_RESULT_ID,
   DEFINITION_TABS_ID,
   HOME_CONTAINER_CLASS,
+  LOADING_SCREEN_QUERY,
 } from "../constants.js";
 import { fetchDefinition } from "../fetchers/definitions.js";
 import router from "../lib/router.js";
@@ -15,7 +17,6 @@ import createHomeView from "../views/homeView.js";
 /*
  * TODO: Loading screen when calling API.
  * TODO: Make footer.
- * TODO: Refactor this, rhymesPage
  * TODO: Opacity animation doesn't have to go for word search.
  */
 
@@ -36,12 +37,20 @@ function createHomePage(wordInput, tabLocation) {
   if (tabLocation !== undefined) tabsData.currentTab = tabLocation;
   //Means there is / and something in URL so we take it and look up definition
   if (wordInput !== undefined) {
+    const loadInterval = getLoadingScreen(homeView.root);
     searchWordAndUpdateData(wordInput).then((result) => {
+      removeLoadingScreen(loadInterval, homeView.root);
       homeView.root.appendChild(result);
       animateResult(result);
     });
   }
   return homeView;
+}
+
+function removeLoadingScreen(intervalId, rootElement) {
+  const loadingDisplay = document.querySelector(LOADING_SCREEN_QUERY);
+  rootElement.removeChild(loadingDisplay);
+  clearInterval(intervalId);
 }
 
 function renderViewWithNav(props) {
@@ -157,7 +166,7 @@ function updateDefinitionView() {
   homeContainer.removeChild(defTabs);
   const defTabsNew = createDefinitionTabsView(tabsData);
   homeContainer.appendChild(defTabsNew);
-  
+
   defTabsNew.scrollIntoView({ behavior: "smooth" });
 }
 

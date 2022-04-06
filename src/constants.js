@@ -8,3 +8,4 @@ export const TABS_SECTION_ID = "tabs-section";
 export const NAVBAR_SECTION_QUERY = "nav.header";
 export const SITE_DESCRIPTION_ID = "website-description";
 export const RHYME_DESCRIPTION_ID = "rhyme-description";
+export const LOADING_SCREEN_QUERY = "h1.loading";
