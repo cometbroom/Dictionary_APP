@@ -6,6 +6,10 @@ This is a web app that allows you to analyze words. You can look up definitions 
 
 ![Image of the homepage](./readme-assets/Homepage%20screenshot.PNG)
 
+## Design
+
+I've made this app with HTML/CSS and vanilla javascript. It is SPA done with javascript. No database as it's using an external API for finding word meanings.
+
 ## Directions
 
 You have 2 tabs, one for Meaning (of words) and the other for Rhymes. On every tab you have an input for searching a word. You can enter any word and analyze them:
