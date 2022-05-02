@@ -5,7 +5,7 @@ import log from "./lib/logger.js";
 
 function loadApp() {
   // Set the desired log level
-  log.setLevel("debug");
+  log.setLevel("error");
   log.info("application", "started");
 
   const appRoot = document.getElementById("app-root");

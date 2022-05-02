@@ -7,6 +7,12 @@ const loadingData = {
 };
 
 function getLoadingScreen(appendTo) {
+  /**
+   * Makes a loading element and appends it to your target
+   * @param {HTMLElement} appendTo - Target to append to
+   * @returns {Number} Interval id to remove loading.
+   */
+
   const display = createElement("h1", { class: "loading" });
   appendTo.appendChild(display);
   return animateLoading(display);
