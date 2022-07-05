@@ -6,6 +6,31 @@ This is a web app that allows you to analyze words. You can look up definitions 
 
 ![Image of the homepage](./readme-assets/Homepage%20screenshot.PNG)
 
+## Folder Structure
+
+```
+.
+├── public/
+│   └── ...Application assets and styling
+├── readme-assets/
+│   └── ...Github assets
+├── src/
+│   ├── components/
+│   │   └── ...Modules that modify elements programatically
+│   ├── fetchers/
+│   │   └── ...Modules for fetching data
+│   ├── lib/
+│   │   └── ...Main functionality tooling such as logger, router etc...
+│   ├── pages/
+│   │   ├── ...Pages controller and functionality module
+│   │   └── ...Routes array responsible for pages entry
+│   ├── tools/
+│   │   └── ...Side functionality tooling such as type checkers
+│   └── views/
+│       └── ...Pages rendering and event listening module
+└── ...App entry, constants and data (on-memory)
+```
+
 ## Design
 
 I've made this app with HTML/CSS and vanilla javascript. It is SPA done with javascript. No database as it's using an external API for finding word meanings.
